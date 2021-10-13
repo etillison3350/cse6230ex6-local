@@ -24,24 +24,88 @@ from one process to the next.
 
 **Your task:** implement the ring test and helper functions labeled `TODO` in `ring-test.cc`.
 
+The program `ring-test` is run using `mpiexec`: for example, when run with 12 processes, your
+correcty implemented program should print something like the following:
 
-## Working with `thrust::device_vector<int>`
+```bash
+$ mpiexec -f $PBS_NODEFILE -n 12 ./ring-test 2 v
+MVAPICH2 Version      : 2.3.2
+MVAPICH2 Release date : Fri August 9 22:00:00 EST 2019
+MVAPICH2 Device       : ch3:mrail
+MVAPICH2 configure    : --prefix=/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-cascadelake/intel-19.0.5/mvapich2-2.3.2-hpgbkqoytbjh35qn2t63rdorepxcezek --enable-shared --enable-romio --disable-silent-rules --disable-new-dtags --enable-fortran=all --enable-threads=multiple --with-ch3-rank-bits=32 --enable-wrapper-rpath=yes --disable-alloca --enable-fast=all --disable-cuda --enable-registration-cache --with-pbs=/opt/torque/current --with-device=ch3:mrail --with-rdma=gen2 --disable-mcast --with-file-system=nfs+ufs
+MVAPICH2 CC           : /var/pace-apps/spack/root/0.13/458c9a2/lib/spack/env/intel/icc    -DNDEBUG -DNVALGRIND -O2
+MVAPICH2 CXX          : /var/pace-apps/spack/root/0.13/458c9a2/lib/spack/env/intel/icpc   -DNDEBUG -DNVALGRIND -O2
+MVAPICH2 F77          : /var/pace-apps/spack/root/0.13/458c9a2/lib/spack/env/intel/ifort -L/lib -L/lib   -O2
+MVAPICH2 FC           : /var/pace-apps/spack/root/0.13/458c9a2/lib/spack/env/intel/ifort   -O2
 
-Our container on the host that manipulates the array on the device is `thrust::device_vector<int> A`.
-
-Because thrust tries not to copy data back and forth from the host to device unneccessarily, operations
-on a device vector are a little different. Here are some tips for working on the assignment:
-
-- `A[i]` is a reference to value on the device: it has type `thrust::device_reference<int>`.
-- Note: if you want, for example to swap `A[0]` and `A[pivot]`, you can use `thrust::swap(A[0],A[pivot])` to avoid copying either value to the host
-- `&A[i]` is a `thrust::device_ptr<int>`.
-- You can make a zip iterator from device pointers as follows: `thrust::make_zip_iterator(thrust::make_tuple(A[i0], A[i1], ...))`.
-- Notice that I have defined several `iter_x_ref` types, which would be the iteration type for that kind of zip iterator.
-- In addition to the algorithms that we have already discussed in class, you may want to use [`for_each`](https://thrust.github.io/doc/group__modifying_ga14cba62489aee67ffa6348eb74997b57.html) or [`for_each_n`](https://thrust.github.io/doc/group__modifying_ga00ad46c06f41dd29601d44d3c6c25819.html#ga00ad46c06f41dd29601d44d3c6c25819)
-- Remember: lambdas that run on the device look like `[] __device__ (args) -> output { body }`.
+MPI # Procs: 12
+MPI Wtime 1.63414e+09, precision 1e-09
+MPI Wtime is global
+MPI rank 0 of 12 on host: atl1-1-02-003-20-l.pace.gatech.edu
+MPI rank 1 of 12 on host: atl1-1-02-003-20-l.pace.gatech.edu
+MPI rank 2 of 12 on host: atl1-1-02-003-20-l.pace.gatech.edu
+MPI rank 3 of 12 on host: atl1-1-02-003-20-l.pace.gatech.edu
+MPI rank 4 of 12 on host: atl1-1-02-003-20-l.pace.gatech.edu
+MPI rank 5 of 12 on host: atl1-1-02-003-20-l.pace.gatech.edu
+MPI rank 6 of 12 on host: atl1-1-02-003-20-l.pace.gatech.edu
+MPI rank 7 of 12 on host: atl1-1-02-003-20-l.pace.gatech.edu
+MPI rank 8 of 12 on host: atl1-1-02-003-20-l.pace.gatech.edu
+MPI rank 9 of 12 on host: atl1-1-02-003-20-l.pace.gatech.edu
+MPI rank 10 of 12 on host: atl1-1-02-003-20-l.pace.gatech.edu
+MPI rank 11 of 12 on host: atl1-1-02-003-20-l.pace.gatech.edu
+MPI rank 0 of 12, message: 0
+MPI rank 1 of 12, message: 1
+MPI rank 2 of 12, message: 2
+MPI rank 3 of 12, message: 3
+MPI rank 4 of 12, message: 4
+MPI rank 5 of 12, message: 5
+MPI rank 6 of 12, message: 6
+MPI rank 7 of 12, message: 7
+MPI rank 8 of 12, message: 8
+MPI rank 9 of 12, message: 9
+MPI rank 10 of 12, message: 10
+MPI rank 11 of 12, message: 11
+MPI rank 0 of 12, message: 12
+MPI rank 1 of 12, message: 13
+MPI rank 2 of 12, message: 14
+MPI rank 3 of 12, message: 15
+MPI rank 4 of 12, message: 16
+MPI rank 5 of 12, message: 17
+MPI rank 6 of 12, message: 18
+MPI rank 7 of 12, message: 19
+MPI rank 8 of 12, message: 20
+MPI rank 9 of 12, message: 21
+MPI rank 10 of 12, message: 22
+MPI rank 11 of 12, message: 23
+MPI rank 0 of 12, message: 24
+MPI rank 1 of 12, message: 25
+MPI rank 2 of 12, message: 26
+MPI rank 3 of 12, message: 27
+MPI rank 4 of 12, message: 28
+MPI rank 5 of 12, message: 29
+MPI rank 6 of 12, message: 30
+MPI rank 7 of 12, message: 31
+MPI rank 8 of 12, message: 32
+MPI rank 9 of 12, message: 33
+MPI rank 10 of 12, message: 34
+MPI rank 11 of 12, message: 35
+{
+ "size": 12,
+ "number of trips": 3,
+ "time (seconds)": 0.00248766,
+ "seconds per message": 6.91017e-05
+}
+```
 
 ## Grading
 
-- Correctness (50%): Your code must properly sort all arrays that our TA tests it on.
-- Use of the device (25%): If all thrust algorithms in `select_device` use `thrust::device` execution policy.
-- No transfers (25%): If no values out of the array (including pivot values!) are copied from the device to the host during sorting.
+- Correctness (70%):
+  - Your code must send the message around the ring the requested number of times, incrementing the counter with each message. (40%)
+  - Your code must, in verbose mode, correctly send the message value to the root processor to print, so that your output looks like the output above (30%)
+
+- Figure and report (30%):
+  - Run `test.pbs` on your code to generate timings of the average message time for different number of processes in `ring_test_X.json`.
+    Generate a figure of the seconds per message for each number of processes (20%)
+  - The script also generates `scatter_ring_test_X.json`, which runs the ring test with four processes on four separate coc-ice nodes.
+    Compare the average seconds per message from that test to the values in `ring_test_X.json` and answer the question: why are
+    these times different? (10%)
