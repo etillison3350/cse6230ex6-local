@@ -81,10 +81,7 @@
 			xlabel=Number of Processes,
 			ylabel=Average Message Time (s)
 			]
-			\addplot[
-                % nodes near coords,
-			    % point meta=explicit symbolic
-            ]table[
+			\addplot table [
                 x=size,
                 y=seconds per message,
                 meta=seconds per message
