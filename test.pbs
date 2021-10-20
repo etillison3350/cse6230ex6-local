@@ -29,6 +29,7 @@ make ring-test
 mpiexec -f ${PBS_NODEFILE} -n ${PBS_NP} ./ring-test 3 v
 
 OUTPUT_FILE="ring_test_${PBS_JOBID%%.*}.json"
+LATEST_FILE="ring_test_latest.json"
 echo "" > $OUTPUT_FILE
 
 DELIM="["
@@ -40,9 +41,14 @@ done
 
 echo "}" >> $OUTPUT_FILE
 
+cp ${OUTPUT_FILE} ${LATEST_FILE}
+
 set -x
 cat $PBS_NODEFILE | uniq > scatter.nodefile
 N=`wc -l < scatter.nodefile`
 OUTPUT_FILE="scatter_ring_test_${PBS_JOBID%%.*}.json"
+LATEST_FILE="scatter_ring_test_latest.json"
 mpiexec -f scatter.nodefile -n $N ./ring-test 1000 > $OUTPUT_FILE
 rm scatter.nodefile
+
+cp ${OUTPUT_FILE} ${LATEST_FILE}

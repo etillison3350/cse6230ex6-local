@@ -7,3 +7,9 @@ ring-test
 
 # Output files
 *.pbs.[eo]*
+ring_test_*.json
+scatter_ring_test_*.json
+
+# Except the most recent output file
+!ring_test_latest.json
+!scatter_ring_test_latest.json
