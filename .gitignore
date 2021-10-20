@@ -1,2 +1,9 @@
 ring-test
 *.optrpt
+
+# Editor Configuration
+.vscode/
+.clang-format
+
+# Output files
+*.pbs.[eo]*
