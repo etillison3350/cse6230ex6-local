@@ -196,6 +196,7 @@ int ring_test(int num_trips, int verbose, int initial_message, int &final_messag
     MPI_CHK(err);
 
     int message;
+    int send_message;
     if (rank == 0)
     {
         message = initial_message;
@@ -206,8 +207,8 @@ int ring_test(int num_trips, int verbose, int initial_message, int &final_messag
                 print_message(message);
             }
 
-            message++;
-            MPI_Send(&message, 1, MPI_INT, 1, msgtag, comm);
+            send_message = message + 1;
+            MPI_Send(&send_message, 1, MPI_INT, 1, msgtag, comm);
 
             if (verbose)
             {
@@ -230,8 +231,8 @@ int ring_test(int num_trips, int verbose, int initial_message, int &final_messag
             {
                 send_message_to_root(message);
             }
-            message++;
-            MPI_Send(&message, 1, MPI_INT, (rank + 1) % size, msgtag, comm);
+            send_message = message + 1;
+            MPI_Send(&send_message, 1, MPI_INT, (rank + 1) % size, msgtag, comm);
         }
     }
 
