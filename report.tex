@@ -1,0 +1,96 @@
+\documentclass{article}
+\usepackage{titling}
+\usepackage[top=1in, left=1in, bottom=1in, right=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{multicol}
+\usepackage{icomma}
+\usepackage{multirow}
+\usepackage{bigdelim}
+\usepackage{caption}
+
+\usepackage{xcolor}
+\usepackage{listings}
+\lstset{
+	language=c++,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\linespread{0.8}\small\ttfamily},
+	keywordstyle=\color{blue},
+	commentstyle=\color{gray},
+	stringstyle=\color{brown},
+	numbers=left,
+	numberstyle=\tiny\ttfamily\color{gray},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=4
+}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, positioning, calc}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+
+\newcommand{\sspace}{\mathcal{S}}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\ints}{\mathbb{Z}}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\lnp}{\log\mathbb{P}}
+\newcommand{\ex}{\mathbb{E}}
+\newcommand{\Var}{\textrm{Var}}
+\newcommand{\Cov}{\textrm{Cov}}
+\newcommand{\bv}{\textbf}
+\newcommand{\bvep}[2]{\textbf{#1}^{(#2)}}
+\newcommand{\norm}[1]{||#1||}
+\newcommand{\loss}{\mathcal{L}}
+\newcommand{\prc}{\textrm{precision}}
+\newcommand{\rcl}{\textrm{recall}}
+\newcommand{\tf}[1]{\textrm{tf}_{#1}}
+\newcommand{\idf}[1]{\textrm{idf}_{#1}}
+
+\pgfplotstableread[col sep=comma]{ring_test_latest.csv}\ringtestdata
+
+% \renewcommand{\labelenumiii}{(\alph{enumiii})}
+
+\renewcommand{\baselinestretch}{1.25}
+
+\newcommand{\subtitle}[1]{%
+	\posttitle{%
+		\par\end{center}
+	\begin{center}\large#1\end{center}
+	\vskip0.5em}%
+}
+
+\title{CSE 6230: High-Performance Parallel Computing}
+\subtitle{Exercise 6: MPI Ring Test}
+\author{Ethan Tillison}
+\date{20 Oct, 2021}
+
+\begin{document}
+\maketitle
+\begin{center}	
+	\captionof{figure}{Average Message Time}
+	\begin{tikzpicture}
+		\begin{semilogxaxis}[
+			width=5in,
+			height=4in,
+			xlabel=Number of Processes,
+			ylabel=Average Message Time (s)
+			]
+			\addplot[
+                % nodes near coords,
+			    % point meta=explicit symbolic
+            ]table[
+                x=size,
+                y=seconds per message,
+                meta=seconds per message
+            ] {\ringtestdata};
+		\end{semilogxaxis}
+	\end{tikzpicture}
+\end{center}
+
+\end{document}

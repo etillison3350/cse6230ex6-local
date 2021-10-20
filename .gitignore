@@ -13,3 +13,8 @@ scatter_ring_test_*.json
 # Except the most recent output file
 !ring_test_latest.json
 !scatter_ring_test_latest.json
+
+# Report tex files
+*.aux
+*.log
+*.synctex.gz

@@ -21,7 +21,7 @@ CHANGED_FILES="$(git diff-files --stat --)"
 test -z "$CHANGED_FILES" || (echo "!!! Changed files not committed (exiting):" && echo $CHANGED_FILES && exit 1) || exit
 
 module purge
-module load git intel mvapich2
+module load git intel mvapich2 anaconda3 texlive
 make clean
 make ring-test
 
@@ -39,7 +39,7 @@ for i in $(seq 2 $PBS_NP); do
   DELIM=",";
 done
 
-echo "}" >> $OUTPUT_FILE
+echo "]" >> $OUTPUT_FILE
 
 cp ${OUTPUT_FILE} ${LATEST_FILE}
 
@@ -52,3 +52,6 @@ mpiexec -f scatter.nodefile -n $N ./ring-test 1000 > $OUTPUT_FILE
 rm scatter.nodefile
 
 cp ${OUTPUT_FILE} ${LATEST_FILE}
+
+./ring_test.py
+pdflatex -synctex=1 -interaction=nonstopmode report.tex
