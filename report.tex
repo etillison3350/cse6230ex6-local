@@ -76,12 +76,15 @@
 	\captionof{figure}{Average Message Time}
 	\begin{tikzpicture}
 		\begin{semilogxaxis}[
-			width=5in,
+			width=6in,
 			height=4in,
 			xlabel=Number of Processes,
 			ylabel=Average Message Time (s)
 			]
-			\addplot table [
+			\addplot[
+                % nodes near coords,
+			    % point meta=explicit symbolic
+            ]table[
                 x=size,
                 y=seconds per message,
                 meta=seconds per message
