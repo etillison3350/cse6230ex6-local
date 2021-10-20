@@ -218,7 +218,6 @@ int ring_test(int num_trips, int verbose, int initial_message, int &final_messag
             }
 
             MPI_Recv(&message, 1, MPI_INT, size - 1, msgtag, comm, MPI_STATUS_IGNORE);
-            final_message = message;
         }
     }
     else
@@ -236,7 +235,7 @@ int ring_test(int num_trips, int verbose, int initial_message, int &final_messag
         }
     }
 
-    final_message = initial_message;
+    final_message = message;
     return 0;
 }
 
